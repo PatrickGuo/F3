@@ -1,6 +1,6 @@
     /* Copyright (c) 2008 The Board of Trustees of The Leland Stanford
  * Junior University
- * 
+ *
  * We are making the OpenFlow specification and associated documentation
  * (Software) available for public use and benefit with the expectation
  * that others will use, modify and enhance the Software and contribute
@@ -13,10 +13,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -25,7 +25,7 @@
  * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- * 
+ *
  * The name and trademarks of copyright holder(s) may NOT be used in
  * advertising or publicity pertaining to the Software or any
  * derivatives without specific, written prior permission.
@@ -97,7 +97,7 @@ int
 main(int argc, char *argv[])
 {
     return udatapath_cmd(argc, argv);
-    
+
 }
 #endif
 
@@ -125,7 +125,7 @@ udatapath_cmd(int argc, char *argv[])
 
     if (use_multiple_connections && (argc - optind) % 2 != 0)
         OFP_FATAL(0, "when using multiple connections, you must specify an even number of listeners");
-        
+
     n_listeners = 0;
     for (i = optind; i < argc; i += 2) {
         const char *pvconn_name = argv[i];
@@ -174,6 +174,7 @@ udatapath_cmd(int argc, char *argv[])
     die_if_already_running();
     daemonize();
 
+    /* Do work. */
     for (;;) {
         dp_run(dp);
         dp_wait(dp);
@@ -264,12 +265,12 @@ parse_options(struct datapath *dp, int argc, char *argv[])
             dp_set_dpid(dp, dpid);
             break;
         }
-        
+
         case 'm': {
             use_multiple_connections = true;
             break;
         }
-        
+
         case 'h':
             usage();
 

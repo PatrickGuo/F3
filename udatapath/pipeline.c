@@ -51,7 +51,7 @@
 #include "hash.h"
 #include "oflib/oxm-match.h"
 #include "vlog.h"
-
+#include "hw-lib/nf2_of_api.h"
 
 #define LOG_MODULE VLM_pipeline
 
@@ -220,6 +220,10 @@ pipeline_handle_flow_mod(struct pipeline *pl, struct ofl_msg_flow_mod *msg,
     qsort(msg->instructions, msg->instructions_num,
         sizeof(struct ofl_instruction_header *), inst_compare);
 
+
+    if(hw_table_flow_mod(msg)) printf("Please install ONetCard and load driver!\n\n");
+    else printf("ONetCard hardware written successfully.\n\n");
+    /*
     // Validate actions in flow_mod
     for (i=0; i< msg->instructions_num; i++) {
         if (msg->instructions[i]->type == OFPIT_APPLY_ACTIONS ||
@@ -240,7 +244,6 @@ pipeline_handle_flow_mod(struct pipeline *pl, struct ofl_msg_flow_mod *msg,
 	    && (msg->instructions[i]->type == OFPIT_GOTO_TABLE))
 	  return ofl_error(OFPET_BAD_INSTRUCTION, OFPBIC_UNSUP_INST);
     }
-
     if (msg->table_id == 0xff) {
         if (msg->command == OFPFC_DELETE || msg->command == OFPFC_DELETE_STRICT) {
             size_t i;
@@ -268,7 +271,7 @@ pipeline_handle_flow_mod(struct pipeline *pl, struct ofl_msg_flow_mod *msg,
         }
         if ((msg->command == OFPFC_ADD || msg->command == OFPFC_MODIFY || msg->command == OFPFC_MODIFY_STRICT) &&
                             msg->buffer_id != NO_BUFFER) {
-            /* run buffered message through pipeline */
+            // run buffered message through pipeline 
             struct packet *pkt;
 
             pkt = dp_buffers_retrieve(pl->dp->buffers, msg->buffer_id);
@@ -277,12 +280,13 @@ pipeline_handle_flow_mod(struct pipeline *pl, struct ofl_msg_flow_mod *msg,
             } else {
                 VLOG_WARN_RL(LOG_MODULE, &rl, "The buffer flow_mod referred to was empty (%u).", msg->buffer_id);
             }
-        }
+        } 
+
+    }*/
 
         ofl_msg_free_flow_mod(msg, !match_kept, !insts_kept, pl->dp->exp);
+    
         return 0;
-    }
-
 }
 
 ofl_err

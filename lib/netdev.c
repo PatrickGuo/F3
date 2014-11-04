@@ -964,7 +964,7 @@ netdev_recv(struct netdev *netdev, struct ofpbuf *buffer)
     if (!strncmp(netdev->name, "tap", 3)) {
         do {
             n_bytes = read(netdev->tap_fd, ofpbuf_tail(buffer),
-                           (ssize_t)ofpbuf_tailroom(buffer));
+                           (ssize_t)ofpbuf_tailroom(buffer)); // do reading packet job
         } while (n_bytes < 0 && errno == EINTR);
     }
     else {
@@ -975,7 +975,7 @@ netdev_recv(struct netdev *netdev, struct ofpbuf *buffer)
 #else
             n_bytes = recvfrom(netdev->tap_fd, ofpbuf_tail(buffer),
                                (ssize_t)ofpbuf_tailroom(buffer), 0,
-                               (struct sockaddr *)&sll, &sll_len);
+                               (struct sockaddr *)&sll, &sll_len); // do reading packet job
 
 #endif /* ifdef HAVE_PACKET_AUXDATA  */
         } while (n_bytes < 0 && errno == EINTR);
@@ -1075,7 +1075,7 @@ netdev_send(struct netdev *netdev, const struct ofpbuf *buffer,
     assert(class_id <= NETDEV_MAX_QUEUES);
 
     do {
-        n_bytes = write(netdev->queue_fd[class_id], buffer->data, buffer->size);
+      n_bytes = write(netdev->queue_fd[class_id], buffer->data, buffer->size);// do writing packet job
     } while (n_bytes < 0 && errno == EINTR);
 
     if (n_bytes < 0) {

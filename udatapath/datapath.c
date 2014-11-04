@@ -115,7 +115,6 @@ struct datapath *
 dp_new(void) {
     struct datapath *dp;
     dp = xmalloc(sizeof(struct datapath));
-
     dp->mfr_desc   = strncpy(xmalloc(DESC_STR_LEN), MFR_DESC, DESC_STR_LEN);
     dp->mfr_desc[DESC_STR_LEN-1]     = 0x00;
     dp->hw_desc    = strncpy(xmalloc(DESC_STR_LEN), HW_DESC, DESC_STR_LEN);
@@ -196,7 +195,7 @@ dp_run(struct datapath *dp) {
     }
 
     poll_timer_wait(1000);
-    dp_ports_run(dp);
+    dp_ports_run(dp); // process the packet here
 
     /* Talk to remotes. */
     LIST_FOR_EACH_SAFE (r, rn, struct remote, node, &dp->remotes) {
@@ -602,7 +601,7 @@ ofl_err
 dp_handle_role_request(struct datapath *dp, struct ofl_msg_role_request *msg,
                                             const struct sender *sender) {
     uint32_t role = msg->role;
-    uint64_t generation_id = msg->generation_id; 
+    uint64_t generation_id = msg->generation_id;
     switch (msg->role) {
         case OFPCR_ROLE_NOCHANGE:{
             role = sender->remote->role;
@@ -643,7 +642,7 @@ dp_handle_role_request(struct datapath *dp, struct ofl_msg_role_request *msg,
             return ofl_error(OFPET_ROLE_REQUEST_FAILED, OFPRRFC_BAD_ROLE);
         }
     }
-    
+
     {
     struct ofl_msg_role_request reply =
         {{.type = OFPT_ROLE_REPLY},

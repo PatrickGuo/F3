@@ -243,7 +243,7 @@ dp_ports_run(struct datapath *dp) {
         while (dequeue_pkt(dp, &buffer, &port_no, &reason)) {
             p = dp_ports_lookup(dp, port_no);
             /* FIXME:  We're throwing away the reason that came from HW */
-            process_packet(dp, p, buffer);
+            process_packet(dp, p, buffer); // similar to process_buffer??
         }
     }
 #endif
